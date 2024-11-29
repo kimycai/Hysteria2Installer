@@ -7,7 +7,9 @@
 wget https://raw.githubusercontent.com/lthero-big/Hysteria2Installer/main/Hy2Install.sh -O Hy2Install.sh && bash Hy2Install.sh
 ```
 
-内含了最新版本hysteria2官方的安装脚本
+内含了
+1. 最新hysteria2官方的安装脚本，来源：[hysteria](https://github.com/apernet/hysteria)
+2. 开启BBR算法的脚本，来源：[秋水逸冰](https://teddysun.com/489.html)
 
 运行本脚本，你只需要
 
