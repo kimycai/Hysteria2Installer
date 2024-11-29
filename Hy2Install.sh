@@ -10,6 +10,22 @@ red_echo() {
   echo -e "\\033[31m$1\\033[0m"
 }
 
+# Function to view the current configuration
+view_current_config() {
+  if [ -f /etc/hysteria/config.yaml ]; then
+    local port=$(grep -E "^listen:" /etc/hysteria/config.yaml | awk '{print $2}' | tr -d ':')
+    local password=$(grep -E "^  password:" /etc/hysteria/config.yaml | awk '{print $2}')
+    local domain=$(grep -E "^    url:" /etc/hysteria/config.yaml | awk '{print $2}')
+    green_echo "----------------------------------------"
+    red_echo "$config_port_message: $port"
+    red_echo "$config_password_message: $password"
+    red_echo "$config_domain_message: $domain"
+    green_echo "----------------------------------------"
+  else
+    red_echo "$config_missing_message"
+  fi
+}
+
 # Function to check the status of the Hysteria service
 check_hysteria_status() {
   local status=$(systemctl is-active hysteria-server.service)
@@ -134,6 +150,7 @@ green_echo "1: English"
 read language
 language=${language:-0}
 
+
 if [ "$language" -eq 1 ]; then
   # English messages
   update_message="Updating system and installing dependencies..."
@@ -158,6 +175,12 @@ if [ "$language" -eq 1 ]; then
   status_message="Hysteria status"
   autostart_message="Hysteria autostart"
   congestion_message="Current congestion control"
+  config_port_message="Configured Port"
+  config_password_message="Configured Password"
+  config_domain_message="Configured Masquerade URL"
+  config_missing_message="Configuration file not found!"
+  # Additional menu options
+  view_config_message="View current configuration"
 else
   # Chinese messages
   update_message="正在更新系统并安装依赖..."
@@ -182,6 +205,11 @@ else
   status_message="Hysteria 状态"
   autostart_message="Hysteria 开机自启"
   congestion_message="当前拥塞控制算法"
+  config_port_message="配置的端口"
+  config_password_message="配置的密码"
+  config_domain_message="配置的伪装域名"
+  config_missing_message="找不到配置文件！"
+  view_config_message="查看当前配置"
 fi
 
 # Menu options based on selected language
@@ -197,6 +225,7 @@ while true; do
     green_echo "5: Enable Hysteria2 autostart"
     green_echo "6: Disable Hysteria2 autostart"
     green_echo "7: Enable BBR congestion control"
+    green_echo "8: $view_config_message"
     green_echo "q: Quit"
     green_echo "====================================================="
     check_hysteria_status
@@ -212,6 +241,7 @@ while true; do
     green_echo "5: 开启开机自启"
     green_echo "6: 关闭开机自启"
     green_echo "7: 启用 BBR 拥塞控制算法"
+    green_echo "8: $view_config_message"
     green_echo "q: 退出"
     green_echo "====================================================="
     check_hysteria_status
@@ -262,6 +292,9 @@ while true; do
       ;;
     7)
       enable_bbr
+      ;;
+    8)
+      view_current_config
       ;;
     q)
       green_echo "$([ "$language" -eq 1 ] && echo 'Exiting...' || echo '正在退出...')"
