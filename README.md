@@ -1,7 +1,8 @@
 # Hysteria2Installer
-一键安装Hysteria2（仅使用自签证书）
 
-下载脚本与安装
+**功能**：一键安装Hysteria2（仅使用自签证书），并且启用BBR算法
+
+## 下载脚本与安装
 ```
 wget https://github.com/lthero-big/Hysteria2Installer/blob/main/Hy2Install.sh & bash ./Hy2Install.sh
 ```
