@@ -213,41 +213,54 @@ else
 fi
 
 # Menu options based on selected language
-while true; do
-  if [ "$language" -eq 1 ]; then
-    # English menu
-    green_echo "=================== Hysteria Menu ==================="
-    green_echo "0: Install Hysteria2"
-    green_echo "1: Modify configuration"
-    green_echo "2: Show status"
-    green_echo "3: Restart Hysteria2"
-    green_echo "4: Stop Hysteria2"
-    green_echo "5: Enable Hysteria2 autostart"
-    green_echo "6: Disable Hysteria2 autostart"
-    green_echo "7: Enable BBR congestion control"
-    green_echo "8: $view_config_message"
-    green_echo "q: Quit"
-    green_echo "====================================================="
-    check_hysteria_status
-    green_echo "Enter your choice:"
-  else
-    # Chinese menu
-    green_echo "=================== Hysteria 菜单 ==================="
-    green_echo "0: 安装 Hysteria2"
-    green_echo "1: 修改配置"
-    green_echo "2: 查看状态"
-    green_echo "3: 重启 Hysteria2"
-    green_echo "4: 停止 Hysteria2"
-    green_echo "5: 开启开机自启"
-    green_echo "6: 关闭开机自启"
-    green_echo "7: 启用 BBR 拥塞控制算法"
-    green_echo "8: $view_config_message"
-    green_echo "q: 退出"
-    green_echo "====================================================="
-    check_hysteria_status
-    green_echo "请输入您的选择:"
-  fi
+if [ "$language" -eq 1 ]; then
+  menu_install="Install Hysteria2"
+  menu_modify="Modify configuration"
+  menu_view="View current configuration"
+  menu_status="Show status"
+  menu_start="Start Hysteria2"
+  menu_restart="Restart Hysteria2"
+  menu_stop="Stop Hysteria2"
+  menu_enable_autostart="Enable Hysteria2 autostart"
+  menu_disable_autostart="Disable Hysteria2 autostart"
+  menu_enable_bbr="Enable BBR congestion control"
+  menu_quit="Quit"
+  menu_title="Hysteria Menu"
+  enterChoice="Enter your choice"
+else
+  menu_install="安装 Hysteria2"
+  menu_modify="修改配置"
+  menu_view="查看当前配置"
+  menu_status="查看状态"
+  menu_start="启动 Hysteria2"
+  menu_restart="重启 Hysteria2"
+  menu_stop="停止 Hysteria2"
+  menu_enable_autostart="开启开机自启"
+  menu_disable_autostart="关闭开机自启"
+  menu_enable_bbr="启用 BBR 拥塞控制算法"
+  menu_quit="退出"
+  menu_title="Hysteria 菜单"
+  enterChoice="请输入您的选择"
+fi
 
+# Menu loop
+while true; do
+  green_echo "=================== $menu_title ==================="
+  green_echo "0: $menu_install"
+  green_echo "1: $menu_modify"
+  green_echo "2: $menu_view"
+  green_echo "3: $menu_status"
+  green_echo "4: $menu_start"
+  green_echo "5: $menu_restart"
+  green_echo "6: $menu_stop"
+  green_echo "7: $menu_enable_autostart"
+  green_echo "8: $menu_disable_autostart"
+  green_echo "9: $menu_enable_bbr"
+  green_echo "q: $menu_quit"
+  green_echo "====================================================="
+  check_hysteria_status
+
+  green_echo $enterChoice
   read choice
 
   case $choice in
@@ -255,53 +268,59 @@ while true; do
       install_hysteria
       ;;
     1)
-      green_echo "$([ "$language" -eq 1 ] && echo 'Opening configuration file...' || echo '正在打开配置文件...')"
+      green_echo "$menu_modify_message"
       sudo vim /etc/hysteria/config.yaml
-      green_echo "$([ "$language" -eq 1 ] && echo 'Restarting Hysteria2...' || echo '正在重启 Hysteria2...')"
+      green_echo "$menu_restart_message"
       sudo systemctl restart hysteria-server.service
-      green_echo "$([ "$language" -eq 1 ] && echo 'Hysteria2 restarted successfully.' || echo 'Hysteria2 重启成功。')"
+      green_echo "$menu_restart_success"
       check_hysteria_status
       ;;
     2)
-      green_echo "$([ "$language" -eq 1 ] && echo 'Checking Hysteria2 status...' || echo '正在检查 Hysteria2 状态...')"
-      check_hysteria_status
+      view_current_config
       ;;
     3)
-      green_echo "$([ "$language" -eq 1 ] && echo 'Restarting Hysteria2...' || echo '正在重启 Hysteria2...')"
-      sudo systemctl restart hysteria-server.service
-      green_echo "$([ "$language" -eq 1 ] && echo 'Hysteria2 restarted successfully.' || echo 'Hysteria2 重启成功。')"
+      green_echo "$menu_status_message"
       check_hysteria_status
       ;;
     4)
-      green_echo "$([ "$language" -eq 1 ] && echo 'Stopping Hysteria2...' || echo '正在停止 Hysteria2...')"
-      sudo systemctl stop hysteria-server.service
-      green_echo "$([ "$language" -eq 1 ] && echo 'Hysteria2 stopped successfully.' || echo 'Hysteria2 停止成功。')"
+      green_echo "$menu_start_message"
+      sudo systemctl start hysteria-server.service
+      green_echo "$menu_start_success"
       check_hysteria_status
       ;;
     5)
-      green_echo "$([ "$language" -eq 1 ] && echo 'Enabling Hysteria2 autostart...' || echo '正在开启 Hysteria2 开机自启...')"
-      sudo systemctl enable hysteria-server.service
-      green_echo "$([ "$language" -eq 1 ] && echo 'Hysteria2 autostart enabled.' || echo 'Hysteria2 开机自启已开启。')"
+      green_echo "$menu_restart_message"
+      sudo systemctl restart hysteria-server.service
+      green_echo "$menu_restart_success"
       check_hysteria_status
       ;;
     6)
-      green_echo "$([ "$language" -eq 1 ] && echo 'Disabling Hysteria2 autostart...' || echo '正在关闭 Hysteria2 开机自启...')"
-      sudo systemctl disable hysteria-server.service
-      green_echo "$([ "$language" -eq 1 ] && echo 'Hysteria2 autostart disabled.' || echo 'Hysteria2 开机自启已关闭。')"
+      green_echo "$menu_stop_message"
+      sudo systemctl stop hysteria-server.service
+      green_echo "$menu_stop_success"
       check_hysteria_status
       ;;
     7)
-      enable_bbr
+      green_echo "$menu_enable_autostart_message"
+      sudo systemctl enable hysteria-server.service
+      green_echo "$menu_enable_autostart_success"
+      check_hysteria_status
       ;;
     8)
-      view_current_config
+      green_echo "$menu_disable_autostart_message"
+      sudo systemctl disable hysteria-server.service
+      green_echo "$menu_disable_autostart_success"
+      check_hysteria_status
+      ;;
+    9)
+      enable_bbr
       ;;
     q)
-      green_echo "$([ "$language" -eq 1 ] && echo 'Exiting...' || echo '正在退出...')"
+      green_echo "$menu_quit_message"
       exit 0
       ;;
     *)
-      green_echo "$([ "$language" -eq 1 ] && echo 'Invalid choice. Please try again.' || echo '无效的选择，请重试。')"
+      green_echo "$menu_invalid_message"
       ;;
   esac
 done
