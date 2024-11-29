@@ -14,14 +14,16 @@ red_echo() {
 check_hysteria_status() {
   local status=$(systemctl is-active hysteria-server.service)
   local enabled=$(systemctl is-enabled hysteria-server.service 2>/dev/null)
+  local congestion=$(sysctl net.ipv4.tcp_congestion_control 2>/dev/null | awk '{print $3}')
   
   green_echo "----------------------------------------"
   green_echo "$status_message: $status"
   green_echo "$autostart_message: $enabled"
+  green_echo "$congestion_message: $congestion"
   green_echo "----------------------------------------"
 }
 
-# Function to install Hysteria2
+# Function to install Hysteria2 and enable BBR
 install_hysteria() {
   green_echo "$update_message"
   sudo apt update && sudo apt install -y curl openssl
@@ -102,10 +104,26 @@ EOF
   sudo systemctl start hysteria-server.service
   sudo systemctl enable hysteria-server.service
 
+  # Install and enable BBR
+  green_echo "$bbr_message"
+  wget --no-check-certificate -O /opt/bbr.sh https://github.com/teddysun/across/raw/master/bbr.sh
+  chmod +x /opt/bbr.sh
+  sudo /opt/bbr.sh
+
   green_echo "$install_success_message"
   red_echo "$port_output: $USER_PORT"
   red_echo "$password_output: $USER_PASSWORD"
   red_echo "$domain_output: $USER_DOMAIN"
+  check_hysteria_status
+}
+
+# Function to enable BBR manually from the menu
+enable_bbr() {
+  green_echo "$bbr_manual_message"
+  wget --no-check-certificate -O /opt/bbr.sh https://github.com/teddysun/across/raw/master/bbr.sh
+  chmod +x /opt/bbr.sh
+  sudo /opt/bbr.sh
+  green_echo "$bbr_success_message"
   check_hysteria_status
 }
 
@@ -131,11 +149,15 @@ if [ "$language" -eq 1 ]; then
   create_service_message="Creating Hysteria2 systemd service file..."
   reload_service_message="Starting and enabling Hysteria2 service..."
   install_success_message="Installation and configuration of Hysteria2 completed successfully!"
+  bbr_message="Installing and enabling BBR congestion control..."
+  bbr_manual_message="Manually enabling BBR congestion control..."
+  bbr_success_message="BBR congestion control has been successfully enabled."
   port_output="Hysteria2 is running on port"
   password_output="Your Hysteria2 password is"
   domain_output="Your masquerade URL is"
   status_message="Hysteria status"
   autostart_message="Hysteria autostart"
+  congestion_message="Current congestion control"
 else
   # Chinese messages
   update_message="正在更新系统并安装依赖..."
@@ -151,11 +173,15 @@ else
   create_service_message="正在创建 Hysteria2 systemd 服务文件..."
   reload_service_message="正在启动并启用 Hysteria2 服务..."
   install_success_message="Hysteria2 安装和配置成功！"
+  bbr_message="正在安装并启用 BBR 拥塞控制算法..."
+  bbr_manual_message="手动启用 BBR 拥塞控制算法..."
+  bbr_success_message="BBR 拥塞控制算法已成功启用。"
   port_output="Hysteria2 正在运行的端口"
   password_output="您的 Hysteria2 密码"
   domain_output="您的伪装域名"
   status_message="Hysteria 状态"
   autostart_message="Hysteria 开机自启"
+  congestion_message="当前拥塞控制算法"
 fi
 
 # Menu options based on selected language
@@ -170,6 +196,7 @@ while true; do
     green_echo "4: Stop Hysteria2"
     green_echo "5: Enable Hysteria2 autostart"
     green_echo "6: Disable Hysteria2 autostart"
+    green_echo "7: Enable BBR congestion control"
     green_echo "q: Quit"
     green_echo "====================================================="
     check_hysteria_status
@@ -184,6 +211,7 @@ while true; do
     green_echo "4: 停止 Hysteria2"
     green_echo "5: 开启开机自启"
     green_echo "6: 关闭开机自启"
+    green_echo "7: 启用 BBR 拥塞控制算法"
     green_echo "q: 退出"
     green_echo "====================================================="
     check_hysteria_status
@@ -232,6 +260,9 @@ while true; do
       green_echo "$([ "$language" -eq 1 ] && echo 'Hysteria2 autostart disabled.' || echo 'Hysteria2 开机自启已关闭。')"
       check_hysteria_status
       ;;
+    7)
+      enable_bbr
+      ;;
     q)
       green_echo "$([ "$language" -eq 1 ] && echo 'Exiting...' || echo '正在退出...')"
       exit 0
@@ -241,4 +272,3 @@ while true; do
       ;;
   esac
 done
-
