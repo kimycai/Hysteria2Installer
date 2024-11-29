@@ -4,7 +4,7 @@
 
 ## 下载脚本与安装
 ```
-wget https://github.com/lthero-big/Hysteria2Installer/blob/main/Hy2Install.sh & bash ./Hy2Install.sh
+wget https://raw.githubusercontent.com/lthero-big/Hysteria2Installer/refs/heads/main/Hy2Install.sh & bash ./Hy2Install.sh
 ```
 
 内含了最新版本hysteria2官方的安装脚本
