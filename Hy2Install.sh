@@ -1,14 +1,58 @@
 #!/bin/bash
 
-# Function to display messages in green
+
+
+# Script version and last updated date
+SCRIPT_VERSION="v_1.0.0"
+SCRIPT_DATE=$(date +"%Y-%m-%d")
+REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/lthero-big/Hysteria2Installer/main/Hy2Install.sh"
+
+# Colors
+BLUE="\033[34m"
+GREEN="\033[32m"
+DEEP_GREEN="\033[1;32m"
+RESET="\033[0m"
+
+# Function to display messages
 green_echo() {
-  echo -e "\\033[32m$1\\033[0m"
+  echo -e "${GREEN}$1${RESET}"
+}
+
+deep_green_echo() {
+  echo -e "${DEEP_GREEN}$1${RESET}"
 }
 
 # Function to display messages in red
 red_echo() {
   echo -e "\\033[31m$1\\033[0m"
 }
+
+blue_echo() {
+  echo -e "${BLUE}$1${RESET}"
+}
+
+# Function to check for script updates
+check_script_update() {
+  green_echo "Checking for script updates..."
+  REMOTE_VERSION=$(curl -fsSL "$REMOTE_SCRIPT_URL" | grep -E "^SCRIPT_VERSION=" | cut -d'"' -f2)
+  if [ "$REMOTE_VERSION" != "$SCRIPT_VERSION" ]; then
+    green_echo "A newer version ($REMOTE_VERSION) is available. Your version: $SCRIPT_VERSION."
+    green_echo "Do you want to update? (y/n)"
+    read update_choice
+    if [[ "$update_choice" == "y" || "$update_choice" == "Y" ]]; then
+      green_echo "Updating script..."
+      curl -fsSL "$REMOTE_SCRIPT_URL" -o "$0"
+      chmod +x "$0"
+      green_echo "Script updated to version $REMOTE_VERSION. Please restart the script."
+      exit 0
+    fi
+  else
+    green_echo "Your script is up-to-date. Version: $SCRIPT_VERSION."
+  fi
+}
+
+# Run update check on script start
+check_script_update
 
 # Function to view the current configuration
 view_current_config() {
