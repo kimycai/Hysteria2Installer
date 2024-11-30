@@ -3,7 +3,7 @@
 
 
 # Script version and last updated date
-SCRIPT_VERSION="v_1.0.2"
+SCRIPT_VERSION="v_1.0.3"
 SCRIPT_DATE=$(date +"%Y-%m-%d")
 REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/lthero-big/Hysteria2Installer/main/Hy2Install.sh"
 
@@ -11,6 +11,7 @@ REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/lthero-big/Hysteria2Install
 BLUE="\033[34m"
 GREEN="\033[32m"
 DEEP_GREEN="\033[1;32m"
+RED="\033[31m"
 RESET="\033[0m"
 
 # Function to display messages
@@ -77,9 +78,9 @@ check_hysteria_status() {
   local congestion=$(sysctl net.ipv4.tcp_congestion_control 2>/dev/null | awk '{print $3}')
   
   green_echo "----------------------------------------"
-  green_echo "$status_message: $status"
-  green_echo "$autostart_message: $enabled"
-  green_echo "$congestion_message: $congestion"
+  echo "${BLUE}$status_message:${RESET} ${RED}$status${RESET}"
+  echo "${BLUE}$autostart_message:${RESET} ${RED}$enabled${RESET}"
+  echo "${BLUE}$congestion_message:${RESET} ${RED}$congestion${RESET}"
   green_echo "----------------------------------------"
 }
 
