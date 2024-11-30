@@ -3,7 +3,7 @@
 
 
 # Script version and last updated date
-SCRIPT_VERSION="v_1.0.0"
+SCRIPT_VERSION="v_1.0.1"
 SCRIPT_DATE=$(date +"%Y-%m-%d")
 REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/lthero-big/Hysteria2Installer/main/Hy2Install.sh"
 
@@ -290,17 +290,17 @@ fi
 # Menu loop
 while true; do
   green_echo "=================== $menu_title ==================="
-  green_echo "0: $menu_install"
-  green_echo "1: $menu_modify"
-  green_echo "2: $menu_view"
-  green_echo "3: $menu_status"
-  green_echo "4: $menu_start"
-  green_echo "5: $menu_restart"
-  green_echo "6: $menu_stop"
-  green_echo "7: $menu_enable_autostart"
-  green_echo "8: $menu_disable_autostart"
-  green_echo "9: $menu_enable_bbr"
-  green_echo "q: $menu_quit"
+  echo -e "${BLUE}0:${RESET} ${DEEP_GREEN}$menu_install${RESET}"
+  echo -e "${BLUE}1:${RESET} ${DEEP_GREEN}$menu_modify${RESET}"
+  echo -e "${BLUE}2:${RESET} ${DEEP_GREEN}$menu_view${RESET}"
+  echo -e "${BLUE}3:${RESET} ${DEEP_GREEN}$menu_status${RESET}"
+  echo -e "${BLUE}4:${RESET} ${DEEP_GREEN}$menu_start${RESET}"
+  echo -e "${BLUE}5:${RESET} ${DEEP_GREEN}$menu_restart${RESET}"
+  echo -e "${BLUE}6:${RESET} ${DEEP_GREEN}$menu_stop${RESET}"
+  echo -e "${BLUE}7:${RESET} ${DEEP_GREEN}$menu_enable_autostart${RESET}"
+  echo -e "${BLUE}8:${RESET} ${DEEP_GREEN}$menu_disable_autostart${RESET}"
+  echo -e "${BLUE}9:${RESET} ${DEEP_GREEN}$menu_enable_bbr${RESET}"
+  echo -e "${BLUE}q:${RESET} ${DEEP_GREEN}$menu_quit${RESET}"
   green_echo "====================================================="
   check_hysteria_status
 
