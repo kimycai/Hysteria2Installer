@@ -3,7 +3,7 @@
 
 
 # Script version and last updated date
-SCRIPT_VERSION="v_1.0.1"
+SCRIPT_VERSION="v_1.0.2"
 SCRIPT_DATE=$(date +"%Y-%m-%d")
 REMOTE_SCRIPT_URL="https://raw.githubusercontent.com/lthero-big/Hysteria2Installer/main/Hy2Install.sh"
 
@@ -271,6 +271,7 @@ if [ "$language" -eq 1 ]; then
   menu_quit="Quit"
   menu_title="Hysteria Menu"
   enterChoice="Enter your choice"
+  script_update="Update script"
 else
   menu_install="安装 Hysteria2"
   menu_modify="修改配置"
@@ -285,6 +286,7 @@ else
   menu_quit="退出"
   menu_title="Hysteria 菜单"
   enterChoice="请输入您的选择"
+  script_update="脚本升级"
 fi
 
 # Menu loop
@@ -300,6 +302,7 @@ while true; do
   echo -e "${BLUE}7:${RESET} ${DEEP_GREEN}$menu_enable_autostart${RESET}"
   echo -e "${BLUE}8:${RESET} ${DEEP_GREEN}$menu_disable_autostart${RESET}"
   echo -e "${BLUE}9:${RESET} ${DEEP_GREEN}$menu_enable_bbr${RESET}"
+  echo -e "${BLUE}10:${RESET} ${DEEP_GREEN}$script_update${RESET}"
   echo -e "${BLUE}q:${RESET} ${DEEP_GREEN}$menu_quit${RESET}"
   green_echo "====================================================="
   check_hysteria_status
@@ -358,6 +361,9 @@ while true; do
       ;;
     9)
       enable_bbr
+      ;;
+    10)
+      check_script_update
       ;;
     q)
       green_echo "$menu_quit_message"
