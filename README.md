@@ -1,4 +1,4 @@
-# Hysteria2Installer
+# Hysteria2Installer（无私货的正常一键脚本）
 
 **功能**：一键安装Hysteria2（仅使用自签证书），并且启用BBR算法
 
